@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ê«ÃÂ… «·”«∆ﬁ</title>
+    <title>√¶√á√å√•√â √á√°√ì√á√Ü√û</title>
     <style>
-        /*  Õ”Ì‰«  «· ‰”Ìﬁ */
+        /* √ä√ç√ì√≠√§√á√ä √á√°√ä√§√ì√≠√û */
         body {
             margin: 0;
             font-family: 'Tajawal', sans-serif;
@@ -70,31 +70,31 @@
 </head>
 <body>
     <div class="header">
-        <h1>„—Õ»« √ÌÂ« «·”«∆ﬁ</h1>
-        <p id="status">«·Õ«·…: <span>Ã«—Ì «· ÂÌ∆…...</span></p>
+        <h1>√£√ë√ç√à√∞√á √É√≠√•√á √á√°√ì√á√Ü√û</h1>
+        <p id="status">√á√°√ç√á√°√â: <span>√å√á√ë√≠ √á√°√ä√•√≠√Ü√â...</span></p>
     </div>
 
     <div id="map"></div>
 
     <div class="trip-info" id="tripDetails" style="display: none;">
-        <h3> ›«’Ì· «·—Õ·…</h3>
-        <p>«·⁄„Ì·: <span id="customerName">-</span></p>
-        <p>«·„”«›…: <span id="tripDistance">-</span></p>
-        <p>«·”⁄—: <span id="tripPrice">-</span></p>
-        <p>ÿ—Ìﬁ… «·œ›⁄: <span id="paymentMethod">-</span></p>
+        <h3>√ä√ù√á√ï√≠√° √á√°√ë√ç√°√â</h3>
+        <p>√á√°√ö√£√≠√°: <span id="customerName">-</span></p>
+        <p>√á√°√£√ì√á√ù√â: <span id="tripDistance">-</span></p>
+        <p>√á√°√ì√ö√ë: <span id="tripPrice">-</span></p>
+        <p>√ò√ë√≠√û√â √á√°√è√ù√ö: <span id="paymentMethod">-</span></p>
     </div>
 
     <div class="controls">
-        <button id="acceptBtn" class="btn" onclick="acceptTrip()" style="display: none;" disabled>ﬁ»Ê· «·—Õ·…</button>
-        <button id="startBtn" class="btn" onclick="startTrip()" style="display: none;" disabled>»œ¡ «·—Õ·…</button>
-        <button id="completeBtn" class="btn" onclick="completeTrip()" style="display: none;" disabled>≈‰Â«¡ «·—Õ·…</button>
+        <button id="acceptBtn" class="btn" onclick="acceptTrip()" style="display: none;" disabled>√û√à√¶√° √á√°√ë√ç√°√â</button>
+        <button id="startBtn" class="btn" onclick="startTrip()" style="display: none;" disabled>√à√è√Å √á√°√ë√ç√°√â</button>
+        <button id="completeBtn" class="btn" onclick="completeTrip()" style="display: none;" disabled>√Ö√§√•√á√Å √á√°√ë√ç√°√â</button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeQx0Ke798anRT_6xAwB-ViewDVb8Jq0U&libraries=places"></script>
     <script>
-        // «· ÂÌ∆… «·¬„‰… ·‹ Firebase
+        // √á√°√ä√•√≠√Ü√â √á√°√Ç√£√§√â √°√ú Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCAwPCVPaxoTEV4n4APATlIKh3ppjMeZpk",
             authDomain: "data-c4c20.firebaseapp.com",
@@ -113,21 +113,21 @@
         }
         const database = firebase.database();
 
-        // «·ÀÊ«»  Ê«·Õ«·« 
+        // √á√°√ã√¶√á√à√ä √¶√á√°√ç√á√°√á√ä
         const DRIVER_STATUS = {
             OFFLINE: 'offline',
             AVAILABLE: 'available',
             BUSY: 'busy'
         };
 
-        // «·„ €Ì—«  «·⁄«„…
+        // √á√°√£√ä√õ√≠√ë√á√ä √á√°√ö√á√£√â
         let map, directionsRenderer, currentPositionMarker;
         let currentTrip = null;
         let driverId = null;
         let watchId = null;
         let tripListener = null;
 
-        //  ÂÌ∆… «·Œ—Ìÿ…
+        // √ä√•√≠√Ü√â √á√°√é√ë√≠√ò√â
         function initMap() {
             try {
                 map = new google.maps.Map(document.getElementById('map'), {
@@ -149,11 +149,11 @@
                 initializeDriver();
             } catch (error) {
                 console.error('Map initialization error:', error);
-                alert('ÕœÀ Œÿ√ ›Ì  Õ„Ì· «·Œ—Ìÿ…');
+                alert('√ç√è√ã √é√ò√É √ù√≠ √ä√ç√£√≠√° √á√°√é√ë√≠√ò√â');
             }
         }
 
-        //  ”ÃÌ· «·”«∆ﬁ
+        // √ä√ì√å√≠√° √á√°√ì√á√Ü√û
         async function initializeDriver() {
             try {
                 driverId = localStorage.getItem('driverId');
@@ -176,20 +176,20 @@
             }
         }
 
-        //  ÕœÌÀ Õ«·… «·”«∆ﬁ
+        // √ä√ç√è√≠√ã √ç√á√°√â √á√°√ì√á√Ü√û
         async function updateDriverStatus(status) {
             try {
                 await database.ref(`drives/${driverId}`).update({
                     status: status,
                     lastUpdate: firebase.database.ServerValue.TIMESTAMP
                 });
-                document.getElementById('status').innerHTML = `«·Õ«·…: <span>${getStatusText(status)}</span>`;
+                document.getElementById('status').innerHTML = `√á√°√ç√á√°√â: <span>${getStatusText(status)}</span>`;
             } catch (error) {
                 console.error('Status update error:', error);
             }
         }
 
-        //   »⁄ «·„Êﬁ⁄
+        // √ä√ä√à√ö √á√°√£√¶√û√ö
         function startTracking() {
             if (navigator.geolocation) {
                 watchId = navigator.geolocation.watchPosition(
@@ -239,7 +239,7 @@
             map.panTo(pos);
         }
 
-        // «·«” „«⁄ ··—Õ·« 
+        // √á√°√á√ì√ä√£√á√ö √°√°√ë√ç√°√á√ä
         function listenForTrips() {
             tripListener = database.ref('rides').on('child_added', handleNewTrip);
         }
@@ -263,7 +263,7 @@
             }
         }
 
-        // ⁄—÷ ÿ·» «·—Õ·…
+        // √ö√ë√ñ √ò√°√à √á√°√ë√ç√°√â
         function showTripRequest(trip) {
             if (currentTrip) return;
 
@@ -271,10 +271,10 @@
             document.getElementById('acceptBtn').disabled = false;
             document.getElementById('acceptBtn').style.display = 'block';
 
-            document.getElementById('customerName').textContent = trip.userName || "⁄„Ì·";
-            document.getElementById('tripDistance').textContent = `${trip.distance.toFixed(2)} ﬂ„`;
-            document.getElementById('tripPrice').textContent = `${trip.price} Ã‰ÌÂ`;
-            document.getElementById('paymentMethod').textContent = trip.paymentMethod === 'cash' ? '‰ﬁœÌ' : '≈·ﬂ —Ê‰Ì';
+            document.getElementById('customerName').textContent = trip.userName || "√ö√£√≠√°";
+            document.getElementById('tripDistance').textContent = `${trip.distance.toFixed(2)} √ü√£`;
+            document.getElementById('tripPrice').textContent = `${trip.price} √å√§√≠√•`;
+            document.getElementById('paymentMethod').textContent = trip.paymentMethod === 'cash' ? '√§√û√è√≠' : '√Ö√°√ü√ä√ë√¶√§√≠';
 
             currentTrip = {
                 userId: trip.userId,
@@ -286,7 +286,7 @@
             drawRoute(trip.startLocation, trip.endLocation);
         }
 
-        // —”„ «·„”«— „⁄ „⁄«·Ã… «·√Œÿ«¡
+        // √ë√ì√£ √á√°√£√ì√á√ë √£√ö √£√ö√á√°√å√â √á√°√É√é√ò√á√Å
         async function drawRoute(start, end) {
             try {
                 const directionsService = new google.maps.DirectionsService();
@@ -307,11 +307,11 @@
                 map.fitBounds(response.routes[0].bounds);
             } catch (error) {
                 console.error('Route drawing error:', error);
-                alert(' ⁄–— —”„ «·„”«—° «·—Ã«¡ «·„Õ«Ê·… ·«Õﬁ«');
+                alert('√ä√ö√ê√ë √ë√ì√£ √á√°√£√ì√á√ë¬° √á√°√ë√å√á√Å √á√°√£√ç√á√¶√°√â √°√á√ç√û√∞√á');
             }
         }
 
-        // ≈œ«—… «·—Õ·…
+        // √Ö√è√á√ë√â √á√°√ë√ç√°√â
         async function acceptTrip() {
             try {
                 await database.ref(`rides/${currentTrip.userId}/${currentTrip.tripId}`).update({
@@ -359,7 +359,7 @@
             }
         }
 
-        // ≈⁄«œ… «· ⁄ÌÌ‰
+        // √Ö√ö√á√è√â √á√°√ä√ö√≠√≠√§
         function resetInterface() {
             directionsRenderer.setDirections({ routes: [] });
             document.getElementById('tripDetails').style.display = 'none';
@@ -367,22 +367,22 @@
             currentTrip = null;
         }
 
-        // √œÊ«  „”«⁄œ…
+        // √É√è√¶√á√ä √£√ì√á√ö√è√â
         function getStatusText(status) {
             const statusMap = {
-                [DRIVER_STATUS.OFFLINE]: '€Ì— „ ’·',
-                [DRIVER_STATUS.AVAILABLE]: '„ «Õ',
-                [DRIVER_STATUS.BUSY]: '„‘€Ê·'
+                [DRIVER_STATUS.OFFLINE]: '√õ√≠√ë √£√ä√ï√°',
+                [DRIVER_STATUS.AVAILABLE]: '√£√ä√á√ç',
+                [DRIVER_STATUS.BUSY]: '√£√î√õ√¶√°'
             };
-            return statusMap[status] || '€Ì— „⁄—Ê›';
+            return statusMap[status] || '√õ√≠√ë √£√ö√ë√¶√ù';
         }
 
         function handleGeolocationError(error) {
             console.error('Geolocation error:', error);
-            alert('ÌÃ»  ›⁄Ì· Œœ„«  «·„Êﬁ⁄ ·«” Œœ«„ «· ÿ»Ìﬁ');
+            alert('√≠√å√à √ä√ù√ö√≠√° √é√è√£√á√ä √á√°√£√¶√û√ö √°√á√ì√ä√é√è√á√£ √á√°√ä√ò√à√≠√û');
         }
 
-        // «· ‰ŸÌ› ⁄‰œ ≈€·«ﬁ «·’›Õ…
+        // √á√°√ä√§√ô√≠√ù √ö√§√è √Ö√õ√°√á√û √á√°√ï√ù√ç√â
         window.addEventListener('beforeunload', async () => {
             if (driverId) {
                 await updateDriverStatus(DRIVER_STATUS.OFFLINE);
@@ -392,8 +392,8 @@
         });
 
         window.addEventListener('load', initMap);
-		// √÷› Â–« ›Ì «· script
-// ·Ã⁄· «· ÿ»Ìﬁ Ì⁄„· ﬂ PWA
+		// √É√ñ√ù √•√ê√á √ù√≠ √á√° script
+// √°√å√ö√° √á√°√ä√ò√à√≠√û √≠√ö√£√° √ü PWA
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
@@ -402,12 +402,12 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// ·„‰⁄ ≈€·«ﬁ «·‘«‘…
+// √°√£√§√ö √Ö√õ√°√á√û √á√°√î√á√î√â
 let wakeLock = null;
 async function requestWakeLock() {
     try {
         wakeLock = await navigator.wakeLock.request('screen');
-        console.log('Screen Wake Lock ›⁄«·');
+        console.log('Screen Wake Lock √ù√ö√á√°');
     } catch (err) {
         console.error(`${err.name}, ${err.message}`);
     }
