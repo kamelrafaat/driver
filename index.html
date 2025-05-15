@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>æÇÌåÉ ÇáÓÇÆÞ</title>
+    <title>واجهة السائق</title>
     <style>
-        /* ÊÍÓíäÇÊ ÇáÊäÓíÞ */
+        /* تحسينات التنسيق */
         body {
             margin: 0;
             font-family: 'Tajawal', sans-serif;
@@ -70,40 +70,52 @@
 </head>
 <body>
     <div class="header">
-        <h1>ãÑÍÈðÇ ÃíåÇ ÇáÓÇÆÞ</h1>
-        <p id="status">ÇáÍÇáÉ: <span>ÌÇÑí ÇáÊåíÆÉ...</span></p>
+        <h1>مرحبًا أيها السائق</h1>
+        <p id="status">الحالة: <span>جاري التهيئة...</span></p>
     </div>
 
     <div id="map"></div>
 
     <div class="trip-info" id="tripDetails" style="display: none;">
-        <h3>ÊÝÇÕíá ÇáÑÍáÉ</h3>
-        <p>ÇáÚãíá: <span id="customerName">-</span></p>
-        <p>ÇáãÓÇÝÉ: <span id="tripDistance">-</span></p>
-        <p>ÇáÓÚÑ: <span id="tripPrice">-</span></p>
-        <p>ØÑíÞÉ ÇáÏÝÚ: <span id="paymentMethod">-</span></p>
+        <h3>تفاصيل الرحلة</h3>
+        <p>العميل: <span id="customerName">-</span></p>
+        <p>المسافة: <span id="tripDistance">-</span></p>
+        <p>السعر: <span id="tripPrice">-</span></p>
+        <p>طريقة الدفع: <span id="paymentMethod">-</span></p>
     </div>
 
     <div class="controls">
-        <button id="acceptBtn" class="btn" onclick="acceptTrip()" style="display: none;" disabled>ÞÈæá ÇáÑÍáÉ</button>
-        <button id="startBtn" class="btn" onclick="startTrip()" style="display: none;" disabled>ÈÏÁ ÇáÑÍáÉ</button>
-        <button id="completeBtn" class="btn" onclick="completeTrip()" style="display: none;" disabled>ÅäåÇÁ ÇáÑÍáÉ</button>
+        <button id="acceptBtn" class="btn" onclick="acceptTrip()" style="display: none;" disabled>قبول الرحلة</button>
+        <button id="startBtn" class="btn" onclick="startTrip()" style="display: none;" disabled>بدء الرحلة</button>
+        <button id="completeBtn" class="btn" onclick="completeTrip()" style="display: none;" disabled>إنهاء الرحلة</button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeQx0Ke798anRT_6xAwB-ViewDVb8Jq0U&libraries=places"></script>
     <script>
-        // ÇáÊåíÆÉ ÇáÂãäÉ áÜ Firebase
+        // التهيئة الآمنة لـ Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyCAwPCVPaxoTEV4n4APATlIKh3ppjMeZpk",
-            authDomain: "data-c4c20.firebaseapp.com",
-            databaseURL: "https://data-c4c20-default-rtdb.firebaseio.com",
-            projectId: "data-c4c20",
-            storageBucket: "data-c4c20.firebasestorage.app",
-            messagingSenderId: "905131784305",
-            appId: "1:905131784305:web:440e06647294b0d5e543d0"
-        };
+              apiKey: "AIzaSyDE8ZAe53IMNZ16JiqsPDLs02MmDqCBIWc",
+
+  authDomain: "login-app-573b4.firebaseapp.com",
+
+  databaseURL: "https://login-app-573b4-default-rtdb.firebaseio.com",
+
+  projectId: "login-app-573b4",
+
+  storageBucket: "login-app-573b4.firebasestorage.app",
+
+  messagingSenderId: "668989126046",
+
+  appId: "1:668989126046:web:81c1c01d5f9e0f7058528f",
+
+  measurementId: "G-9TJRGMZR81"
+
+};
+
+
+     
 
         let app;
         try {
@@ -113,21 +125,21 @@
         }
         const database = firebase.database();
 
-        // ÇáËæÇÈÊ æÇáÍÇáÇÊ
+        // الثوابت والحالات
         const DRIVER_STATUS = {
             OFFLINE: 'offline',
             AVAILABLE: 'available',
             BUSY: 'busy'
         };
 
-        // ÇáãÊÛíÑÇÊ ÇáÚÇãÉ
+        // المتغيرات العامة
         let map, directionsRenderer, currentPositionMarker;
         let currentTrip = null;
         let driverId = null;
         let watchId = null;
         let tripListener = null;
 
-        // ÊåíÆÉ ÇáÎÑíØÉ
+        // تهيئة الخريطة
         function initMap() {
             try {
                 map = new google.maps.Map(document.getElementById('map'), {
@@ -149,11 +161,11 @@
                 initializeDriver();
             } catch (error) {
                 console.error('Map initialization error:', error);
-                alert('ÍÏË ÎØÃ Ýí ÊÍãíá ÇáÎÑíØÉ');
+                alert('حدث خطأ في تحميل الخريطة');
             }
         }
 
-        // ÊÓÌíá ÇáÓÇÆÞ
+        // تسجيل السائق
         async function initializeDriver() {
             try {
                 driverId = localStorage.getItem('driverId');
@@ -176,20 +188,20 @@
             }
         }
 
-        // ÊÍÏíË ÍÇáÉ ÇáÓÇÆÞ
+        // تحديث حالة السائق
         async function updateDriverStatus(status) {
             try {
-                await database.ref(`drives/${driverId}`).update({
+                await database.ref(`driver/${driverId}`).update({
                     status: status,
                     lastUpdate: firebase.database.ServerValue.TIMESTAMP
                 });
-                document.getElementById('status').innerHTML = `ÇáÍÇáÉ: <span>${getStatusText(status)}</span>`;
+                document.getElementById('status').innerHTML = `الحالة: <span>${getStatusText(status)}</span>`;
             } catch (error) {
                 console.error('Status update error:', error);
             }
         }
 
-        // ÊÊÈÚ ÇáãæÞÚ
+        // تتبع الموقع
         function startTracking() {
             if (navigator.geolocation) {
                 watchId = navigator.geolocation.watchPosition(
@@ -212,7 +224,7 @@
                 };
 
                 updateMapMarker(pos);
-                await database.ref(`drives/${driverId}/location`).set(pos);
+                await database.ref(`driver/${driverId}/location`).set(pos);
             } catch (error) {
                 console.error('Position update error:', error);
             }
@@ -239,31 +251,36 @@
             map.panTo(pos);
         }
 
-        // ÇáÇÓÊãÇÚ ááÑÍáÇÊ
+        // الاستماع للرحلات
         function listenForTrips() {
-            tripListener = database.ref('rides').on('child_added', handleNewTrip);
+            tripListener = database.ref('travel').on('child_added', handleNewTrip);
         }
 
         async function handleNewTrip(userSnapshot) {
-            try {
-                const userId = userSnapshot.key;
-                const tripSnapshot = await database.ref(`rides/${userId}`).orderByChild('status').equalTo('new').once('value');
-                
-                tripSnapshot.forEach(trip => {
-                    if (trip.val().status === 'new' && !trip.val().driverId) {
-                        showTripRequest({
-                            ...trip.val(),
-                            userId: userId,
-                            tripId: trip.key
-                        });
-                    }
+                try {
+        const userId = userSnapshot.key;
+        const tripSnapshot = await database.ref(`travel/${userId}`)
+            .orderByChild('status')
+            .equalTo('searching') // تغيير من 'new' إلى 'searching'
+            .once('value');
+        
+        tripSnapshot.forEach(trip => {
+            const tripData = trip.val();
+            if (!tripData.driverId) {
+                showTripRequest({
+                    ...tripData,
+                    userId: userId,
+                    tripId: trip.key
                 });
-            } catch (error) {
-                console.error('New trip handling error:', error);
             }
-        }
+        });
+    } catch (error) {
+        console.error('New trip handling error:', error);
+    }
+}
 
-        // ÚÑÖ ØáÈ ÇáÑÍáÉ
+
+        // عرض طلب الرحلة
         function showTripRequest(trip) {
             if (currentTrip) return;
 
@@ -271,22 +288,28 @@
             document.getElementById('acceptBtn').disabled = false;
             document.getElementById('acceptBtn').style.display = 'block';
 
-            document.getElementById('customerName').textContent = trip.userName || "Úãíá";
-            document.getElementById('tripDistance').textContent = `${trip.distance.toFixed(2)} ßã`;
-            document.getElementById('tripPrice').textContent = `${trip.price} Ìäíå`;
-            document.getElementById('paymentMethod').textContent = trip.paymentMethod === 'cash' ? 'äÞÏí' : 'ÅáßÊÑæäí';
+            document.getElementById('customerName').textContent = trip.userName || "عميل";
+            document.getElementById('tripDistance').textContent = `${trip.distance.toFixed(2)} كم`;
+            document.getElementById('tripPrice').textContent = `${trip.price} جنيه`;
+            document.getElementById('paymentMethod').textContent = trip.paymentMethod === 'الدفع نقدي' ? 'نقدي' : 'إلكتروني';
 
-            currentTrip = {
-                userId: trip.userId,
-                tripId: trip.tripId,
-                startLocation: trip.startLocation,
-                endLocation: trip.endLocation
-            };
+                currentTrip = {
+        userId: trip.userId,
+        tripId: trip.tripId,
+        startLocation: { 
+            lat: trip.start_lat, // تغيير من startLocation.lat إلى start_lat
+            lng: trip.start_lng 
+        },
+        endLocation: {
+            lat: trip.end_lat, // تغيير من endLocation.lat إلى end_lat
+            lng: trip.end_lng
+        }
+    };
 
             drawRoute(trip.startLocation, trip.endLocation);
         }
 
-        // ÑÓã ÇáãÓÇÑ ãÚ ãÚÇáÌÉ ÇáÃÎØÇÁ
+        // رسم المسار مع معالجة الأخطاء
         async function drawRoute(start, end) {
             try {
                 const directionsService = new google.maps.DirectionsService();
@@ -307,17 +330,18 @@
                 map.fitBounds(response.routes[0].bounds);
             } catch (error) {
                 console.error('Route drawing error:', error);
-                alert('ÊÚÐÑ ÑÓã ÇáãÓÇÑ¡ ÇáÑÌÇÁ ÇáãÍÇæáÉ áÇÍÞðÇ');
+                alert('تعذر رسم المسار، الرجاء المحاولة لاحقًا');
             }
         }
 
-        // ÅÏÇÑÉ ÇáÑÍáÉ
+        // إدارة الرحلة
         async function acceptTrip() {
             try {
-                await database.ref(`rides/${currentTrip.userId}/${currentTrip.tripId}`).update({
+                await database.ref(`travel/${currentTrip.userId}/${currentTrip.tripId}`).update({
                     status: 'accepted',
                     driverId: driverId,
-                    acceptedAt: firebase.database.ServerValue.TIMESTAMP
+                    acceptedAt: firebase.database.ServerValue.TIMESTAMP,
+					 car_type: "سيارة فاخرة" // إضافة حقل نوع السيارة
                 });
 
                 await updateDriverStatus(DRIVER_STATUS.BUSY);
@@ -332,7 +356,7 @@
 
         async function startTrip() {
             try {
-                await database.ref(`rides/${currentTrip.userId}/${currentTrip.tripId}`).update({
+                await database.ref(`travel/${currentTrip.userId}/${currentTrip.tripId}`).update({
                     status: 'in_progress',
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                 });
@@ -347,7 +371,7 @@
 
         async function completeTrip() {
             try {
-                await database.ref(`rides/${currentTrip.userId}/${currentTrip.tripId}`).update({
+                await database.ref(`travel/${currentTrip.userId}/${currentTrip.tripId}`).update({
                     status: 'completed',
                     completedAt: firebase.database.ServerValue.TIMESTAMP
                 });
@@ -359,7 +383,7 @@
             }
         }
 
-        // ÅÚÇÏÉ ÇáÊÚííä
+        // إعادة التعيين
         function resetInterface() {
             directionsRenderer.setDirections({ routes: [] });
             document.getElementById('tripDetails').style.display = 'none';
@@ -367,33 +391,33 @@
             currentTrip = null;
         }
 
-        // ÃÏæÇÊ ãÓÇÚÏÉ
+        // أدوات مساعدة
         function getStatusText(status) {
             const statusMap = {
-                [DRIVER_STATUS.OFFLINE]: 'ÛíÑ ãÊÕá',
-                [DRIVER_STATUS.AVAILABLE]: 'ãÊÇÍ',
-                [DRIVER_STATUS.BUSY]: 'ãÔÛæá'
+                [DRIVER_STATUS.OFFLINE]: 'غير متصل',
+                [DRIVER_STATUS.AVAILABLE]: 'متاح',
+                [DRIVER_STATUS.BUSY]: 'مشغول'
             };
-            return statusMap[status] || 'ÛíÑ ãÚÑæÝ';
+            return statusMap[status] || 'غير معروف';
         }
 
         function handleGeolocationError(error) {
             console.error('Geolocation error:', error);
-            alert('íÌÈ ÊÝÚíá ÎÏãÇÊ ÇáãæÞÚ áÇÓÊÎÏÇã ÇáÊØÈíÞ');
+            alert('يجب تفعيل خدمات الموقع لاستخدام التطبيق');
         }
 
-        // ÇáÊäÙíÝ ÚäÏ ÅÛáÇÞ ÇáÕÝÍÉ
+        // التنظيف عند إغلاق الصفحة
         window.addEventListener('beforeunload', async () => {
             if (driverId) {
                 await updateDriverStatus(DRIVER_STATUS.OFFLINE);
                 navigator.geolocation.clearWatch(watchId);
-                database.ref('rides').off('child_added', tripListener);
+                database.ref('travel').off('child_added', tripListener);
             }
         });
 
         window.addEventListener('load', initMap);
-		// ÃÖÝ åÐÇ Ýí Çá script
-// áÌÚá ÇáÊØÈíÞ íÚãá ß PWA
+		// أضف هذا في ال script
+// لجعل التطبيق يعمل ك PWA
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
@@ -402,12 +426,12 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// áãäÚ ÅÛáÇÞ ÇáÔÇÔÉ
+// لمنع إغلاق الشاشة
 let wakeLock = null;
 async function requestWakeLock() {
     try {
         wakeLock = await navigator.wakeLock.request('screen');
-        console.log('Screen Wake Lock ÝÚÇá');
+        console.log('Screen Wake Lock فعال');
     } catch (err) {
         console.error(`${err.name}, ${err.message}`);
     }
